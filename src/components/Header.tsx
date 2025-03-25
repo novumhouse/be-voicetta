@@ -21,9 +21,10 @@ import { cn } from '@/lib/utils';
 
 interface HeaderProps {
   className?: string;
+  apiStatus?: "ok" | "degraded" | "down";
 }
 
-const Header: React.FC<HeaderProps> = ({ className }) => {
+const Header: React.FC<HeaderProps> = ({ className, apiStatus }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
