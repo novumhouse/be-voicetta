@@ -3,9 +3,12 @@ import React, { useEffect, useState } from 'react';
 import Header from '@/components/Header';
 import Dashboard from '@/components/Dashboard';
 import { cn } from '@/lib/utils';
+import { useHealthStatus } from '@/hooks/useApi';
+import { toast } from '@/hooks/use-toast';
 
 const Index = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const { status, loading: statusLoading, error } = useHealthStatus();
   
   useEffect(() => {
     // Simulate loading
@@ -16,9 +19,20 @@ const Index = () => {
     return () => clearTimeout(timer);
   }, []);
   
+  useEffect(() => {
+    // Show toast if there's an API error
+    if (error) {
+      toast({
+        title: "API Connection Error",
+        description: "Using mock data instead. Check API configuration.",
+        variant: "destructive",
+      });
+    }
+  }, [error]);
+
   return (
     <div className="min-h-screen flex flex-col animated-bg">
-      <Header />
+      <Header apiStatus={status?.status || "down"} />
       
       <main className={cn(
         "flex-1 pt-16 transition-opacity duration-500 ease-in-out",
